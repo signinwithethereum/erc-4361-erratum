@@ -25,13 +25,13 @@ The remediation is filed as an erratum against version 1 of ERC-4361 by the curr
 
 This repository is the **public evidence base** for the ERC-4361 erratum. It does not contain maintainer-internal planning documents (risk register, stage plan, contingency strategies); those remain internal so that editors, co-authors, and community reviewers engage with the technical content on its own terms.
 
-References in the documents below to `action-plan.md` and `risk-register.md` point to maintainer-internal artefacts not included here. Where such a reference materially affects a reader's ability to follow a rationale, the relevant content has been inlined into the public document.
-
 ## Related pull requests
 
-- The omnibus erratum PR against `ethereum/ERCs`: (to be added at submission)
-- The concurrent reclassification of the `userinfo@` domain vectors in `signinwithethereum/test-vectors`: (to be added at submission)
-- Downstream parser updates in `@signinwithethereum/siwe` (TS), `@signinwithethereum/siwe-py`, `@signinwithethereum/siwe-rs`, and the Go port: (to be added at submission)
+The erratum ships as a coordinated set of pull requests. Once the main PR opens, the URLs will be listed here.
+
+- Main PR: `ethereum/ERCs`, the omnibus ERC-4361 erratum (20 commits).
+- Concurrent PR: `signinwithethereum/test-vectors`, reclassifying the two `userinfo@` grammar-completeness vectors from positive to negative to match the proposed narrowing.
+- Downstream PRs: minor version bumps against `@signinwithethereum/siwe` (TS), `@signinwithethereum/siwe-py`, `@signinwithethereum/siwe-rs`, and the Go port, applying the surviving normative changes.
 
 ## License
 

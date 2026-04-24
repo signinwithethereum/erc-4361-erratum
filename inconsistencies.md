@@ -58,7 +58,7 @@ One reads as mandatory, the other as recommended. An implementation that takes t
 
 It is tempting to read the production as structurally unable to express an EIP-55-encoded (mixed-case) address, because [RFC 5234 Appendix B.1](https://www.rfc-editor.org/rfc/rfc5234#appendix-B.1) defines `HEXDIG` with uppercase letters only. In fact, [RFC 5234 §2.3](https://www.rfc-editor.org/rfc/rfc5234#section-2.3) makes ABNF string literals case-**in**sensitive by default, and [RFC 7405](https://www.rfc-editor.org/rfc/rfc7405)'s `%s` prefix is the opt-in mechanism for case-sensitive matching. This spec uses `%s` for its field labels (`%s"URI: "`, `%s"Version: "`, …) but does **not** use it on `HEXDIG` or on the `"0x"` prefix. Consequently:
 
-- Mixed-case hex digits (and therefore EIP-55-encoded addresses) are structurally valid against the grammar — no change to `HEXDIG` is needed to admit them.
+- Mixed-case hex digits (and therefore EIP-55-encoded addresses) are structurally valid against the grammar; no change to `HEXDIG` is needed to admit them.
 - As a side effect, the literal `"0x"` is also case-insensitive, so `0X…` would parse. Neither EIP-55 nor the field description expects that; an explicit `%s"0x"` or a `%x30 %x78` equivalent would close that gap.
 
 **Public discussion:** No public discussion found that explicitly identifies the MUST vs. SHOULD split, or the `"0x"` / `0X` case-lenience in the ABNF, as of 2026-04-13.

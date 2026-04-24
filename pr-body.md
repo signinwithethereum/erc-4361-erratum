@@ -10,7 +10,7 @@ This PR is filed by the current maintainer of the canonical `@signinwithethereum
 
 - `editorial`: typos, stale names, wording. No normative effect.
 - `clarification`: no wire change, no behavior change in any correct implementation. Aligns prose or reference implementation with what the spec already meant.
-- `narrow`: grammar becomes stricter. No real implementation produces the affected patterns today. Three narrowings ship with zero corpus impact; one (finding #6) requires a coordinated `libs/test-vectors` release.
+- `narrow`: grammar becomes stricter. No real implementation produces the affected patterns today. Three narrowings ship with zero corpus impact; one (finding #6) requires a coordinated `@signinwithethereum/test-vectors` release.
 - `widen`: grammar becomes looser. Parser rollout is recommended before producer rollout.
 - `judgment`: a genuine direction call between two competing readings; resolution documented in the commit body.
 
@@ -41,7 +41,7 @@ Finding numbers refer to the catalogue in the evidence document linked below.
 
 ## Backwards compatibility
 
-All changes were audited against the canonical shared test-vector corpus at `libs/test-vectors/vectors/*.json`, which is consumed by the four maintained SIWE libraries (TS, Python, Rust, Go). Observed effects on the corpus:
+All changes were audited against the canonical shared test-vector corpus `@signinwithethereum/test-vectors` (`vectors/*.json`), which is consumed by the four maintained SIWE libraries (TS, Python, Rust, Go). Observed effects on the corpus:
 
 - 15 of 20 commits are editorial or clarifications with no wire change.
 - 3 narrowings (findings #15, #16, #17) affect zero positive vectors in the corpus.
