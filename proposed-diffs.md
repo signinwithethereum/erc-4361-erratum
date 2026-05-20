@@ -136,19 +136,19 @@ Line 112:
 
 ```diff
 -- `domain` REQUIRED. The domain that is requesting the signing. Its value MUST be an RFC 3986 authority. The authority includes an OPTIONAL port. If the port is not specified, the default port for the provided `scheme` is assumed (e.g., 443 for HTTPS). If `scheme` is not specified, HTTPS is assumed by default.
-+- `domain` REQUIRED. The domain that is requesting the signing. Its value MUST be an RFC 3986 authority (see grammar below for restrictions on the `host` subcomponent). The authority includes an OPTIONAL port. If the port is not specified, the default port for the effective `scheme` is assumed (e.g., 443 for HTTPS). If `scheme` is not specified in the message, the wallet's `defaultScheme` (see the Wallet Implementer Steps) is used as the effective scheme for origin-comparison purposes; browser wallets' `defaultScheme` MUST be `https`.
++- `domain` REQUIRED. The domain that is requesting the signing. Its value MUST be an RFC 3986 authority (see grammar below for restrictions on the `host` subcomponent). The authority includes an OPTIONAL port. If the port is not specified, the default port for the effective `scheme` is assumed (e.g., 443 for HTTPS). If `scheme` is not specified in the message, the wallet's `defaultScheme` (see the Wallet Implementer Steps) is used as the effective scheme for origin-comparison purposes.
 ```
 
 Line 264:
 
 ```diff
 -- `defaultScheme` - a scheme to assume when none was provided. Wallet implementers in the browser SHOULD use `https`.
-+- `defaultScheme` - the scheme to assume when none was provided in the message. Wallet implementers in the browser MUST use `https`; non-browser wallet implementers MAY choose a different value appropriate to their transport.
++- `defaultScheme` - the scheme to assume when none was provided in the message. Wallet implementers in the browser SHOULD use `https`.
 ```
 
-**Rationale:** The Message Fields section reads like a protocol-wide HTTPS default, while the wallet algorithm uses an implementation input. This keeps `defaultScheme` but makes browser behavior match the prose.
+**Rationale:** The Message Fields section reads like a protocol-wide HTTPS default, while the wallet algorithm uses an implementation input. The erratum routes the line 112 default through `defaultScheme` so both passages agree on a single resolution path. The original SHOULD on browser `https` is preserved.
 
-**Compatibility:** Browser wallets already use `https`. No wire change.
+**Compatibility:** No behavior change. The wallet algorithm continues to take `defaultScheme` as input and browser wallets continue to use `https` by SHOULD.
 
 ---
 
@@ -228,7 +228,7 @@ Inside ABNF:
 
 ## Commit 10: Finding #3 (ERC-55 MUST vs. SHOULD)
 
-**Tag:** Judgment. Harmonized down to SHOULD.
+**Tag:** Judgment. Restated to match canonical parser behavior: mixed-case addresses MUST be ERC-55 valid, while all-lowercase and all-uppercase addresses remain accepted.
 
 **Replacement:** lines 71-74.
 
@@ -236,15 +236,15 @@ Inside ABNF:
 -address = "0x" 40*40HEXDIG
 -    ; Must also conform to capitalization
 -    ; checksum encoding specified in ERC-55
+-    ; where applicable (EOAs).
 +address = %s"0x" 40*40HEXDIG
-+    ; SHOULD also conform to the mixed-case
-+    ; checksum encoding specified in ERC-55
-     ; where applicable (EOAs).
++    ; If the address format is mixed-case, it
++    ; MUST conform to its ERC-55 checksum.
 ```
 
-**Rationale:** The ABNF comment says mandatory checksum; the Message Fields section says SHOULD. The canonical vectors warn on all-lowercase/all-uppercase addresses and reject only wrong-checksum mixed-case addresses. This supports the SHOULD reading. The same hunk also pins the `0x` prefix as case-sensitive.
+**Rationale:** The ABNF comment says mandatory checksum; the Message Fields section says SHOULD. The canonical vectors warn on all-lowercase/all-uppercase addresses and reject only wrong-checksum mixed-case addresses. The erratum restates the rule to match that observed behavior: addresses whose hex digits are entirely upper-case or entirely lower-case remain accepted, while mixed-case addresses MUST be valid ERC-55. The same hunk also pins the `0x` prefix as case-sensitive.
 
-**Compatibility:** Existing producers emitting ERC-55 addresses remain conforming. Existing parsers that accept non-checksummed addresses remain conforming.
+**Compatibility:** Existing producers emitting ERC-55 addresses remain conforming. Parsers that accept all-lowercase or all-uppercase addresses remain conforming. Parsers that previously accepted mixed-case addresses with an invalid checksum become non-conforming, matching the canonical libraries' existing reject behavior.
 
 ---
 
@@ -350,16 +350,33 @@ Message Fields, replacing the statement text from Commit 12:
 
 **Tag:** Clarification.
 
-**Replacement:** edits to `assets/eip-4361/example.js`.
+**Replacement:** edits to `assets/erc-4361/example.js`.
 
 1. Add `[ scheme "://" ]` handling to the top-level parser so explicit-scheme examples parse.
-2. Change the statement grammar to match Commit 13's `*( %x20-7E )`, with a helper production for the statement/blank-line separator so the reference parser accepts both no-statement and non-empty-statement layouts.
-3. Extend `createMessage` to accept and emit `expirationTime`, `notBefore`, `requestId`, and non-empty `resources`.
-4. Add the three ERC-4361 example messages as lightweight regression fixtures in comments.
+2. Change the statement grammar to match Commit 13's `*( %x20-7E )`, with a `statement-section` helper production so the reference parser accepts both no-statement and non-empty-statement layouts.
+3. Extend `createMessage` to accept and emit `statement`, `expirationTime`, `notBefore`, `requestId`, and non-empty `resources`.
+4. Keep the address-grammar comment in sync with the post-Commit-10 ABNF wording in the spec body.
+5. Add the three ERC-4361 example messages as lightweight regression fixtures in comments.
 
 **Rationale:** The reference implementation should match the cumulative ERC text, especially for the spec's own explicit-scheme example.
 
 **Compatibility:** The reference implementation is non-normative. This aligns it with the spec body and canonical parser behavior.
+
+---
+
+## Commit 15: link-target normalization
+
+**Tag:** Editorial.
+
+**Replacement:** intra-document Markdown links to other Ethereum standards.
+
+- Links to ERCs that live in the same repository are normalized to `./erc-N.md` (previously a mix of `./eip-N.md` and `./erc-N.md`). This covers ERC-20, ERC-55, ERC-181, ERC-191, ERC-721, ERC-1155, ERC-1271, and ERC-1328.
+- The lone EIP cited as a Core EIP, EIP-712, is pointed at an absolute URL on `eips.ethereum.org`, since Core EIPs do not live in this repository.
+- The `requires:` front-matter entry for EIP-155 is left untouched; that number is unchanged and the front-matter resolver does not depend on file paths.
+
+**Rationale:** Stale `./eip-N.md` paths are dead links after the ERCs split. Normalizing to `./erc-N.md` and using an absolute URL for the one Core EIP citation makes every link in the document resolvable.
+
+**Compatibility:** Link-targets only. No normative effect.
 
 ---
 
@@ -376,10 +393,11 @@ Message Fields, replacing the statement text from Commit 12:
 | 7 | #8 | Clarification | exact host comparison |
 | 8 | #5 | Clarification | explicit grammar imports |
 | 9 | #1 | Clarification | UTF-8 wire encoding |
-| 10 | #3 | Judgment | ERC-55 SHOULD and `%s"0x"` |
+| 10 | #3 | Judgment | mixed-case ERC-55 MUST; `%s"0x"` |
 | 11 | #6, #16 | Narrow | exclude userinfo; host non-empty |
 | 12 | #12, #13, #14 | Clarification | empty optional-field semantics |
 | 13 | #11 | Widen | printable ASCII statement |
 | 14 | #4 | Clarification | reference implementation |
+| 15 | — | Editorial | link-target normalization |
 
 Deferred from this erratum: #9, #10, #15, #17.

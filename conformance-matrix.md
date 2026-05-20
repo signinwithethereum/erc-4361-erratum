@@ -59,7 +59,7 @@ Scan date: 2026-04-23.
 
 | Finding | Pattern in corpus | Interpretation |
 | --- | --- | --- |
-| #3 | All-lowercase and all-uppercase addresses are warnings; wrong-checksum mixed-case addresses are negative. | Supports harmonizing ERC-55 down to SHOULD. |
+| #3 | All-lowercase and all-uppercase addresses are warnings; wrong-checksum mixed-case addresses are negative. | Supports restating ERC-55 as "mixed-case addresses MUST be valid ERC-55" while keeping all-lowercase and all-uppercase addresses accepted. |
 | #2 | Verification vectors apply a single ERC-191 prefix at signing time. | Supports the prefix-once clarification. |
 | #4 | Explicit-scheme messages are accepted by canonical parsers but rejected by the linked reference implementation. | Supports updating `assets/eip-4361/example.js`. |
 
@@ -75,6 +75,7 @@ Scan date: 2026-04-23.
 | Empty `statement` | pass | pass | pass | #12 |
 | Bare `Resources:` | pass | pass | pass | #13 |
 | Statement punctuation currently negative | fail | pass | fail | #11 |
-| Non-EIP-55 all-lower/all-uppercase address | warning | warning | warning | #3 |
+| All-lower/all-uppercase address | warning | accepted | warning | #3 |
+| Wrong-checksum mixed-case address | rejected | rejected | rejected | #3 |
 
 The simplified erratum has one retained narrowing (`userinfo@` in `domain`) and one retained widening (`statement` printable ASCII). Everything else is editorial, clarification, or producer guidance that preserves parser acceptance.

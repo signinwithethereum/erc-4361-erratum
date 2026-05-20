@@ -20,9 +20,9 @@ Severity is scoped to the erratum:
 
 The ABNF comment says the address "Must" conform to the ERC-55 checksum, while the Message Fields section says the address value "SHOULD" be ERC-55 conformant where applicable.
 
-One implementation can therefore reject lowercase or uppercase EOA addresses while another accepts them with warnings, and both can claim to be following the current document. The canonical `@signinwithethereum` test vectors support the SHOULD reading: all-lowercase and all-uppercase addresses are warnings, while wrong-checksum mixed-case addresses are rejected.
+One implementation can therefore reject lowercase or uppercase EOA addresses while another accepts them with warnings, and both can claim to be following the current document. The canonical `@signinwithethereum` test vectors split the difference: all-lowercase and all-uppercase addresses produce a warning, while wrong-checksum mixed-case addresses are rejected.
 
-The erratum harmonizes down to `SHOULD` and pins the address prefix as case-sensitive with `%s"0x"`.
+The erratum restates the ABNF comment to match that split — "if the address format is mixed-case, it MUST conform to its ERC-55 checksum" — and pins the address prefix as case-sensitive with `%s"0x"`.
 
 **Public discussion:** No public discussion found that explicitly identifies the MUST vs. SHOULD split as of 2026-04-13.
 
@@ -103,7 +103,7 @@ The erratum explicitly imports the RFC 3986 productions that the grammar already
 
 The Message Fields section says HTTPS is assumed by default when `scheme` is omitted. The wallet origin-verification algorithm instead takes a `defaultScheme` input and only says browser wallets SHOULD use `https`.
 
-The erratum resolves this by using the wallet's `defaultScheme` as the effective scheme, while requiring browser wallets to use `https`.
+The erratum resolves this by routing the line 112 default through the wallet's `defaultScheme`, so both passages agree on a single resolution path. The original SHOULD on browser `https` is preserved.
 
 **Public discussion:** No public discussion found that explicitly identifies the conflicting omitted-scheme defaults as of 2026-04-13.
 
