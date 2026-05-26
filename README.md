@@ -1,40 +1,32 @@
 # ERC-4361 erratum
 
-Evidence backing a pull request against [`ethereum/ERCs`](https://github.com/ethereum/ERCs) that remediates internal contradictions in ERC-4361 (Sign-In with Ethereum).
+Evidence backing the ERC-4361 (Sign-In with Ethereum) erratum at [`signinwithethereum/ERCs#1`](https://github.com/signinwithethereum/ERCs/pull/1), filed against version 1 of ERC-4361 by the maintainer of the canonical [@signinwithethereum](https://github.com/signinwithethereum) SIWE implementations.
 
-**The pull request:** [signinwithethereum/ERCs#1](https://github.com/signinwithethereum/ERCs/pull/1) (preview, pre-submission). When the PR moves to `ethereum/ERCs` at submission, this link will be updated.
+The PR body is the summary and per-commit table. This repository is the evidence base behind it: catalogue of findings, the 19-commit series with diff hunks, and the conformance audit against the canonical test vectors.
 
-The PR body is a rendering of the evidence in this repository, not a separate argument. Reading the PR and then this repository is redundant; use the PR for the summary and navigation, and drill into this repository when you want the primary sources behind any specific claim.
-
-The remediation is filed as an erratum against version 1 of ERC-4361 by the current maintainer of the canonical [@signinwithethereum](https://github.com/signinwithethereum) SIWE implementations. Most changes are editorial corrections or clarifications that align the grammar, prose, and reference implementation. The few behavior-affecting changes are explicitly classified in [`proposed-diffs.md`](./proposed-diffs.md).
+Most commits are editorial or clarifications. The behavior-affecting changes are narrow: `userinfo@` is excluded from the SIWE `domain` field, and `statement` is widened to printable ASCII.
 
 ## What's in this repository
 
 | Document | Purpose |
 | --- | --- |
-| [`inconsistencies.md`](./inconsistencies.md) | Catalogue of internal contradictions, ambiguities, mismatches, and deferred hardening ideas considered for the ERC-4361 erratum. Each active finding links to any relevant public discussion (GitHub issues, Ethereum Magicians threads). |
-| [`proposed-diffs.md`](./proposed-diffs.md) | Replacement text, rationale, and backwards-compatibility classification for the simplified ERC-4361 erratum PR. |
-| [`conformance-matrix.md`](./conformance-matrix.md) | Empirical audit of the proposed changes against the canonical `@signinwithethereum/test-vectors` corpus shared by the TypeScript, Python, Rust, and Go SIWE libraries. |
-| [`erc-4361-snapshot.md`](./erc-4361-snapshot.md) | Frozen copy of `ERCS/erc-4361.md` at the revision audited (2026-04-23). Ensures line-number citations elsewhere in this repository remain valid even as upstream merges other PRs. |
+| [`inconsistencies.md`](./inconsistencies.md) | Catalogue of contradictions, ambiguities, and mismatches in ERC-4361, with public-discussion pointers and severity ratings. |
+| [`proposed-diffs.md`](./proposed-diffs.md) | One section per PR commit, in PR order, with the upstream diff hunk, tag, finding(s) addressed, and compatibility note. Reflects the 19 commits actually on the [`review/4361`](https://github.com/signinwithethereum/ERCs/tree/review/4361) branch. |
+| [`conformance-matrix.md`](./conformance-matrix.md) | Empirical audit of the proposed changes against the canonical [`@signinwithethereum/test-vectors`](https://github.com/signinwithethereum/test-vectors) corpus shared by the TypeScript, Python, Rust, and Go SIWE libraries. |
+| [`erc-4361-snapshot.md`](./erc-4361-snapshot.md) | Frozen copy of `ERCS/erc-4361.md` at the revision audited (2026-04-23). Keeps line-number citations stable as upstream evolves. |
 
-## Reading order for reviewers
+## Reading order
 
-1. Start with the [PR description](https://github.com/signinwithethereum/ERCs/pull/1) for the erratum summary and per-commit classification table.
-2. Drill into [`inconsistencies.md`](./inconsistencies.md) for the primary-source catalogue behind each finding.
-3. Read [`proposed-diffs.md`](./proposed-diffs.md) for the per-commit replacement text and rationale.
-4. Consult [`conformance-matrix.md`](./conformance-matrix.md) for the empirical backing on backwards compatibility.
+1. The [PR description](https://github.com/signinwithethereum/ERCs/pull/1) for the summary and per-commit table.
+2. [`inconsistencies.md`](./inconsistencies.md) for the primary-source catalogue.
+3. [`proposed-diffs.md`](./proposed-diffs.md) for the actual commit-by-commit text.
+4. [`conformance-matrix.md`](./conformance-matrix.md) for backwards-compatibility evidence.
 
-## Scope boundaries
+## Related work
 
-This repository is the **public evidence base** for the ERC-4361 erratum. It is scoped to technical evidence, proposed text, compatibility notes, and conformance data.
-
-## Related pull requests
-
-The erratum ships as a coordinated set of pull requests.
-
-- **Main PR:** [signinwithethereum/ERCs#1](https://github.com/signinwithethereum/ERCs/pull/1) (preview, pre-submission). The simplified ERC-4361 erratum. Will move to `ethereum/ERCs` at submission.
-- **Concurrent PR:** `signinwithethereum/test-vectors`, reclassifying the two `userinfo@` grammar-completeness vectors from positive to negative, and updating statement-character vectors for the proposed printable-ASCII widening. URL added when the PR opens.
-- **Downstream PRs:** minor version bumps against `@signinwithethereum/siwe` (TS), `@signinwithethereum/siwe-py`, `@signinwithethereum/siwe-rs`, and the Go port, applying only the surviving parser changes. URLs added when the PRs open.
+- **Main PR:** [`signinwithethereum/ERCs#1`](https://github.com/signinwithethereum/ERCs/pull/1) — open on the `review/4361` branch.
+- **Concurrent test-vector PR:** [`signinwithethereum/test-vectors#1`](https://github.com/signinwithethereum/test-vectors/pull/1) — moves the two `userinfo@` domain vectors from positive to negative, and updates statement-character vectors for the printable-ASCII widening.
+- **Downstream library PRs:** minor version bumps against the maintained TypeScript, Python, Rust, and Go SIWE libraries, applying only the surviving parser changes. URLs to be added when those PRs open.
 
 ## License
 
